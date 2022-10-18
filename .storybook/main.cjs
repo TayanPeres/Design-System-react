@@ -16,8 +16,8 @@ module.exports = {
     "storyStoreV7": true
   },
   viteFinal: (config, { configType}) => {
-    if(configType == "PRODUCTION") {
-      config.base = './Design-system-react'
+    if(configType === 'PRODUCTION') {
+      config.base = '/Design-system-react/'
     }
     return config
   }
