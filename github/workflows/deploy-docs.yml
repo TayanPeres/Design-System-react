@@ -1,31 +1,30 @@
-name: Deploy Storybook docs
 
-on: 
- push:
-  branches:
-  - master
-  
-  jobs: 
-   build-and-deploy:
-    runs-n: Windows
+name: Deploy docs
 
-    steps: 
-      -  name: Checkout
-         users: actions/checkout@v3
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-and-deploy:
+    runs-on: windows
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
 
       - name: Setup Node.js
-        users: actions/setup-node@v3
-        with: 
-         node-version: 16
-      
-      
-         - run: npm ci
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'npm'
+         
 
-      - name: Build Storybook
-      - run: npm run build-storybook
+      - run: npm ci --force
 
+      - run: npm run build
+      
       - name: Deploy storybook
-       
-         run: npm run deploy-storybook -- --ci --existing-output-dir=storybook-static
+        run: npm run deploy-storybook -- --ci --existing-output-dir=storybook-static
         env:
           GH_TOKEN: ${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}
